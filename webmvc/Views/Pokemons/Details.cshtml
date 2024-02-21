@@ -1,0 +1,19 @@
+﻿@model PokeApiNet.Pokemon
+
+@{
+    ViewData["Title"] = "Pokemon " +Model.Id;
+}
+
+<h1>Edit</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

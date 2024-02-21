@@ -1,0 +1,29 @@
+﻿@model IEnumerable<PokeApiNet.Pokemon>
+
+@{
+    ViewBag.Title = "Favorites";
+}
+
+<h5 class="text-uppercase p-2 text-center">Favorite Pokemons</h5>
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark text-white">
+        <tr>
+            <th>@Html.DisplayNameFor(m => Model.GetEnumerator().Current.Name)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                </td>
+                <td>
+                    <a asp-action="Unfavor" asp-route-id="@item.Id">Unfavor</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+ 

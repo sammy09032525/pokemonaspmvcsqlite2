@@ -1,0 +1,150 @@
+﻿BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "__EFMigrationsHistory";
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+	"MigrationId"	TEXT NOT NULL,
+	"ProductVersion"	TEXT NOT NULL,
+	CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY("MigrationId")
+);
+DROP TABLE IF EXISTS "NamedApiResource<Ability>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<Ability>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<Generation>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<Generation>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<Item>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<Item>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<MoveLearnMethod>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<MoveLearnMethod>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<PokemonForm>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<PokemonForm>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<PokemonSpecies>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<PokemonSpecies>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<Stat>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<Stat>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<Type>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<Type>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<Version>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<Version>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "NamedApiResource<VersionGroup>";
+CREATE TABLE IF NOT EXISTS "NamedApiResource<VersionGroup>" (
+	"Name"	TEXT NOT NULL,
+	"Url"	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS "Pokemon";
+CREATE TABLE IF NOT EXISTS "Pokemon" (
+	"Id"	Integer NOT NULL,
+	"Name"	TEXT NOT NULL,
+	CONSTRAINT "PK_Pokemon" PRIMARY KEY("Id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "PokemonHeldItemVersion";
+CREATE TABLE IF NOT EXISTS "PokemonHeldItemVersion" (
+	"Rarity"	INTEGER NOT NULL
+);
+DROP TABLE IF EXISTS "PokemonMoveVersion";
+CREATE TABLE IF NOT EXISTS "PokemonMoveVersion" (
+	"LevelLearnedAt"	INTEGER NOT NULL
+);
+DROP TABLE IF EXISTS "PokemonStat";
+CREATE TABLE IF NOT EXISTS "PokemonStat" (
+	"Effort"	INTEGER NOT NULL,
+	"BaseStat"	INTEGER NOT NULL
+);
+DROP TABLE IF EXISTS "PokemonType";
+CREATE TABLE IF NOT EXISTS "PokemonType" (
+	"Slot"	INTEGER NOT NULL
+);
+DROP TABLE IF EXISTS "RoleClaims";
+CREATE TABLE IF NOT EXISTS "RoleClaims" (
+	"Id"	INTEGER NOT NULL,
+	"RoleId"	INTEGER NOT NULL,
+	"ClaimType"	TEXT,
+	"ClaimValue"	TEXT,
+	CONSTRAINT "PK_RoleClaims" PRIMARY KEY("Id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "Roles";
+CREATE TABLE IF NOT EXISTS "Roles" (
+	"Id"	INTEGER NOT NULL,
+	"Name"	TEXT,
+	"NormalizedName"	TEXT,
+	"ConcurrencyStamp"	TEXT,
+	CONSTRAINT "PK_Roles" PRIMARY KEY("Id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "UserClaims";
+CREATE TABLE IF NOT EXISTS "UserClaims" (
+	"Id"	INTEGER NOT NULL,
+	"UserId"	INTEGER NOT NULL,
+	"ClaimType"	TEXT,
+	"ClaimValue"	TEXT,
+	CONSTRAINT "PK_UserClaims" PRIMARY KEY("Id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "UserLogins";
+CREATE TABLE IF NOT EXISTS "UserLogins" (
+	"UserId"	INTEGER NOT NULL,
+	"LoginProvider"	TEXT,
+	"ProviderKey"	TEXT,
+	"ProviderDisplayName"	TEXT,
+	CONSTRAINT "PK_UserLogins" PRIMARY KEY("UserId" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "UserRoles";
+CREATE TABLE IF NOT EXISTS "UserRoles" (
+	"UserId"	INTEGER NOT NULL,
+	"RoleId"	INTEGER NOT NULL,
+	CONSTRAINT "PK_UserRoles" PRIMARY KEY("UserId" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "Users";
+CREATE TABLE IF NOT EXISTS "Users" (
+	"Id"	INTEGER NOT NULL,
+	"UserName"	TEXT,
+	"NormalizedUserName"	TEXT,
+	"Email"	TEXT,
+	"NormalizedEmail"	TEXT,
+	"EmailConfirmed"	INTEGER NOT NULL,
+	"PasswordHash"	TEXT,
+	"SecurityStamp"	TEXT,
+	"ConcurrencyStamp"	TEXT,
+	"PhoneNumber"	TEXT,
+	"PhoneNumberConfirmed"	INTEGER NOT NULL,
+	"TwoFactorEnabled"	INTEGER NOT NULL,
+	"LockoutEnd"	TEXT,
+	"LockoutEnabled"	INTEGER NOT NULL,
+	"AccessFailedCount"	INTEGER NOT NULL,
+	CONSTRAINT "PK_Users" PRIMARY KEY("Id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "UserTokens";
+CREATE TABLE IF NOT EXISTS "UserTokens" (
+	"UserId"	INTEGER NOT NULL,
+	"LoginProvider"	TEXT,
+	"Name"	TEXT,
+	"Value"	TEXT,
+	CONSTRAINT "PK_UserTokens" PRIMARY KEY("UserId" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "VersionGameIndex";
+CREATE TABLE IF NOT EXISTS "VersionGameIndex" (
+	"GameIndex"	INTEGER NOT NULL
+);
+COMMIT;

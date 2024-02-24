@@ -18,6 +18,10 @@ namespace webmvc
         // Use this method to add services to the container. 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            var application = Configuration.GetSection("AppSettings:Application");
+            services.Configure<Application>(application);
+
             services.Configure<IdentityOptions>(options => { 
                 options.SignIn.RequireConfirmedEmail = false;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
@@ -30,8 +34,6 @@ namespace webmvc
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredUniqueChars = 1;
-
-
             });
 
             services.ConfigureApplicationCookie(options =>
@@ -53,7 +55,7 @@ namespace webmvc
                 .AddEntityFrameworkStores<MyDbContext>();
 
             services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
-
+            services.AddRazorPages(options => { });
             services.AddSingleton<PokeApiNet.PokeApiClient>();
         }
         
@@ -70,9 +72,16 @@ namespace webmvc
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseAuthentication();
-            
+            app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
             app.UseRouting();
+            //app.MapControllerRoute(
+            //    name: "default",
+            //    pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.UseEndpoints(endpoints => { 
+                endpoints.MapRazorPages();
+            });
+//            app.MapRazorPages();
         }
     }
 }

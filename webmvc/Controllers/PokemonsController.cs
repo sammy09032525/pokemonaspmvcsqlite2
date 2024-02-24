@@ -38,7 +38,7 @@ namespace webmvc.Controllers
                 FavoritePokemons = _dbContext.Pokemons.ToArray(),
                 IsAuthenticated = HttpContext.User.Identity.IsAuthenticated
             };
-            return View("Index2", tables);
+            return View("Index", tables);
         }
 
         [HttpGet]

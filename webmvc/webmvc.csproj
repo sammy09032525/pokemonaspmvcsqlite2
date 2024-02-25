@@ -8,15 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Infrastructure\BasicAuthenticationHandler.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Infrastructure\Pokemon.sql" />
-    <None Remove="Infrastructure\Pokemon.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ApplicationDefinition Include="Infrastructure\Pokemon.sql" />
   </ItemGroup>
 

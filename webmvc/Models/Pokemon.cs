@@ -537,7 +537,8 @@ namespace PokeApiNet
         /// <summary>
         /// A list of abilities this Pokémon could potentially have.
         /// </summary>
-//        public List<PokemonAbility> Abilities { get; set; }
+        [NotMapped]
+        public List<PokemonAbility> Abilities { get; set; }
 
         /// <summary>
         /// A list of forms this Pokémon can take on.

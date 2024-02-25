@@ -13,53 +13,49 @@
     var lbs = Math.Round(@Model.Weight * 0.22046, 2);
 }
 <div class="row">
-    <img class="rounded float-start" src="@Model.Sprites.Other.OfficialArtwork.FrontDefault" />
-</div>
-<div class="pokemon-ability-info color-bg color-lightblue match active" style="min-height: 243px;">
-    <div class="column-7">
-        <ul>
-            <li>
-                <span class="attribute-title">Height</span>
-                <span class="attribute-value">@iFeet' @inches"</span>
-            </li>
-
-            <li>
-                <span class="attribute-title">Weight</span>
-                <span class="attribute-value">@lbs lbs</span>
-            </li>
-
-        </ul>
+    <div class="col">
+        <img style="max-height:fit-content; max-width:fit-content" width="430" height="430" class="rounded float-start" src="@Model.Sprites.Other.OfficialArtwork.FrontDefault" alt="@Model.Name" />
     </div>
+    <div class="col pokemon-ability-info color-bg color-lightblue match active" style="min-height: 243px;">
+        <div class="column-7">
+            <h3>Size</h3>
+            <ul>
+                <li>
+                    <span class="attribute-title">Height:</span>
+                    <span class="attribute-value">@iFeet' @inches"</span>
+                </li>
 
-    <div class="column-7 push-7">
-        <ul>
-            <li>
-                <span class="attribute-title">Abilities</span>
+                <li>
+                    <span class="attribute-title">Weight:</span>
+                    <span class="attribute-value">@lbs lbs</span>
+                </li>
 
-                <ul class="attribute-list">
-        @foreach (var t in Model.Abilities)
-        {
+            </ul>
+        </div>
+
+        <div class="column-7 push-7">
+            <h3>Abilities</h3>
+            <ul class="attribute-list">
+                        @foreach (var t in Model.Abilities)
+                        {
+                            <li>
+                                <span class="attribute-value">@t.Ability.Name</span>
+                            </li>
+                        }
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Type</h3>
+            <ul>
+                @foreach (var t in Model.Types)
+                {
                     <li>
-                            <span class="attribute-value">@t.Ability.Name</span>
+                        @t.Type.Name
                     </li>
-        }
-                </ul>
-            </li>
-
-        </ul>
+                }
+            </ul>
+        </div>
     </div>
-
-</div>
-<div class="col-md-6">
-    <h3>Type</h3>
-    <ul>
-        @foreach (var t in Model.Types)
-        {
-            <li>
-                @t.Type.Name
-            </li>
-        }
-    </ul>
 </div>
 <div>
     <a class="btn btn-danger" asp-action="Index"> <i class="bi bi-arrow-left"></i> Back to List</a>

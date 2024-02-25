@@ -13,22 +13,22 @@ html {
   min-height: 100%;
 }
 
-body {
+/*body {
   margin-bottom: 60px;
-}
+}*/
 /* unvisited link */
-a:link {
+/*a:link {
     color: #000;
-}
+}*/
 /* visited link */
-a:visited {
+/*a:visited {
     color: #095484;
-}
+}*/
 /* mouse over link */
-a:hover {
+/*a:hover {
     color: #8ebf42;
-}
+}*/
 /* selected link */
-a:active {
+/*a:active {
     color: inherit;
-}
+}*/

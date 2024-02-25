@@ -1,6 +1,10 @@
 ﻿@model PokeApiNet.Pokemon
 
 @{
+    ViewData["Title"] = @Model.Name + " - " + @Model.Id;
+}
+
+@{
     // Model.Height in decimeter
     var Feet = @Model.Height * 10 / 2.54 / 12;
     int iFeet = (int)Feet;
@@ -8,14 +12,8 @@
     // Model.Weight in hectogram
     var lbs = Math.Round(@Model.Weight * 0.22046, 2);
 }
-<h1>
-    @Model.Name
-    <span>#@Model.Id</span>
-</h1>
-
-<hr />
 <div class="row">
-    <img height="370" width="370" src="@Model.Sprites.Other.OfficialArtwork.FrontDefault" />
+    <img class="rounded float-start" src="@Model.Sprites.Other.OfficialArtwork.FrontDefault" />
 </div>
 <div class="pokemon-ability-info color-bg color-lightblue match active" style="min-height: 243px;">
     <div class="column-7">
@@ -30,25 +28,11 @@
                 <span class="attribute-value">@lbs lbs</span>
             </li>
 
-            <li>
-                <span class="attribute-title">Gender</span>
-
-                <span class="attribute-value">
-                    <i class="icon icon_male_symbol"></i>
-                    <i class="icon icon_female_symbol"></i>
-                </span>
-
-            </li>
         </ul>
     </div>
 
     <div class="column-7 push-7">
         <ul>
-            <li>
-                <span class="attribute-title">Category</span>
-                <span class="attribute-value">Bat</span>
-            </li>
-
             <li>
                 <span class="attribute-title">Abilities</span>
 
@@ -66,7 +50,7 @@
     </div>
 
 </div>
-<div class="dtm-type">
+<div class="col-md-6">
     <h3>Type</h3>
     <ul>
         @foreach (var t in Model.Types)
@@ -78,5 +62,5 @@
     </ul>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-danger" asp-action="Index"> <i class="bi bi-arrow-left"></i> Back to List</a>
 </div>

@@ -1,13 +1,12 @@
 ﻿@model webmvc.ViewModels.PokemonViewModel
 
 @{
-    ViewData["Title"] = "Pokémon";
+    ViewData["Title"] = "Available Pokémon cards";
 }
 
-<h1>Pokémon</h1>
 @if (User.Identity.IsAuthenticated)
 {
-    <a asp-action="Favorites">Favorites</a>
+    <a class="btn btn-danger" asp-action="Favorites">Favorites <i class="bi bi-bookmark-fill"></i> </a>
 }
 <table class="table">
     <thead>
@@ -15,7 +14,9 @@
             <th>
                 @Html.DisplayNameFor(x => x.AvailablePokemons.Results.GetEnumerator().Current.Name)
             </th>
-            <th></th>
+            <th class="text-end">
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -24,11 +25,14 @@
             var isFavorite = Model.FavoritePokemons.Any(p => p.Id.ToString() == item.Url);
         <tr>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Url">@item.Name</a>
+                    <a class="text-capitalize text-decoration-none link-dark" asp-action="Details" asp-route-id="@item.Url">@item.Name</a>
             </td>
-            <td>
-                @if(!isFavorite && Model.IsAuthenticated){
-                <a asp-action="Favor" asp-route-id="@item.Url">Favor</a> 
+                <td class="text-end">
+                    @if (!isFavorite && Model.IsAuthenticated)
+                    {
+                        <a class="text-capitalize text-decoration-none link-dark" asp-action="Favor" asp-route-id="@item.Url" asp-route-name="@item.Name">
+                        <i class="bi bi-bookmark">Favor</i>
+                    </a>
                 }
 @*              <a asp-action="Unfavor" asp-route-id="@item.Url">Unfavor</a> *@            
             </td>
@@ -43,11 +47,11 @@
 
 <a asp-action="Index"
    asp-route-offset="@(Model.AvailablePokemons.Previous)"
-   class="btn btn-link @prevDisabled">
-    Previous
+   class="btn btn-light @prevDisabled">
+    <i class="bi bi-arrow-left"></i> Previous
 </a>
 <a asp-action="Index"
    asp-route-offset="@(Model.AvailablePokemons.Next)"
-   class="btn btn-link @nextDisabled">
-    Next
+   class="btn btn-light @nextDisabled">
+    Next <i class="bi bi-arrow-right"></i>
 </a>

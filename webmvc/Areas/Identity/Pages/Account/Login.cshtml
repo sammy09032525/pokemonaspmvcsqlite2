@@ -2,8 +2,9 @@
 @using Microsoft.Extensions.Options
 @inject IOptions<Application> application
 @model LoginModel
-
-<h1>Welcome to @application.Value.Name</h1>
+@{
+    ViewData["Title"] = "Welcome to " + @application.Value.Name;
+}
 <div class="row">
     <div class="col-md-4">
         <section>

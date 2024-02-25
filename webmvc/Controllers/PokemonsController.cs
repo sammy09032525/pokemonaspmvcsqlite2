@@ -67,17 +67,13 @@ namespace webmvc.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Favor(int? id)
+        public async Task<IActionResult> Favor(int? id, string? name)
         {
             if (id == null)
                 return RedirectToAction("", "Pokemons");
 
-            var pokemon = await _apiClient.GetResourceAsync<Pokemon>((int)id);
-            if (pokemon == null)
-            {
-                return NotFound();
-            }
-            var pokemonRecord = new webmvc.Models.Pokemon { Id = pokemon.Id, Name= pokemon.Name };
+
+            var pokemonRecord = new webmvc.Models.Pokemon { Id = id.Value, Name= name };
             _dbContext.Add(pokemonRecord);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("", "Pokemons");
@@ -90,8 +86,9 @@ namespace webmvc.Controllers
             if (id == null)
                 return RedirectToAction("", "Favorites");
 
-            var pokemonRecord = _dbContext.Pokemons.First(c => c.Id == id.Value); 
-//            var pokemonRecord = new webmvc.Models.Pokemon { Id = id.Value};
+            var pokemonRecord = await _dbContext.Pokemons.FirstOrDefaultAsync(c => c.Id == id.Value); 
+            if (pokemonRecord == null)
+                return NotFound();
             _dbContext.Remove(pokemonRecord);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("Favorites");

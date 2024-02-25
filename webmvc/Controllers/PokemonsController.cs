@@ -77,7 +77,8 @@ namespace webmvc.Controllers
             {
                 return NotFound();
             }
-            _dbContext.Add(pokemon);
+            var pokemonRecord = new webmvc.Models.Pokemon { Id = pokemon.Id, Name= pokemon.Name };
+            _dbContext.Add(pokemonRecord);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("", "Pokemons");
         }
@@ -89,12 +90,9 @@ namespace webmvc.Controllers
             if (id == null)
                 return RedirectToAction("", "Favorites");
 
-            var pokemon = await _apiClient.GetResourceAsync<Pokemon>((int)id);
-            if (pokemon == null)
-            {
-                return NotFound();
-            }
-            _dbContext.Remove(pokemon);
+            var pokemonRecord = _dbContext.Pokemons.First(c => c.Id == id.Value); 
+//            var pokemonRecord = new webmvc.Models.Pokemon { Id = id.Value};
+            _dbContext.Remove(pokemonRecord);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("Favorites");
         }

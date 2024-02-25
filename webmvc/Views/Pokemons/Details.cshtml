@@ -1,19 +1,82 @@
 ﻿@model PokeApiNet.Pokemon
 
 @{
-    ViewData["Title"] = "Pokemon " +Model.Id;
+    // Model.Height in decimeter
+    var Feet = @Model.Height * 10 / 2.54 / 12;
+    int iFeet = (int)Feet;
+    var inches = (int)((Feet - (double)iFeet) * 12);
+    // Model.Weight in hectogram
+    var lbs = Math.Round(@Model.Weight * 0.22046, 2);
 }
-
-<h1>Edit</h1>
+<h1>
+    @Model.Name
+    <span>#@Model.Id</span>
+</h1>
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-    </div>
+    <img height="370" width="370" src="@Model.Sprites.Other.OfficialArtwork.FrontDefault" />
 </div>
+<div class="pokemon-ability-info color-bg color-lightblue match active" style="min-height: 243px;">
+    <div class="column-7">
+        <ul>
+            <li>
+                <span class="attribute-title">Height</span>
+                <span class="attribute-value">@iFeet' @inches"</span>
+            </li>
 
+            <li>
+                <span class="attribute-title">Weight</span>
+                <span class="attribute-value">@lbs lbs</span>
+            </li>
+
+            <li>
+                <span class="attribute-title">Gender</span>
+
+                <span class="attribute-value">
+                    <i class="icon icon_male_symbol"></i>
+                    <i class="icon icon_female_symbol"></i>
+                </span>
+
+            </li>
+        </ul>
+    </div>
+
+    <div class="column-7 push-7">
+        <ul>
+            <li>
+                <span class="attribute-title">Category</span>
+                <span class="attribute-value">Bat</span>
+            </li>
+
+            <li>
+                <span class="attribute-title">Abilities</span>
+
+                <ul class="attribute-list">
+        @foreach (var t in Model.Abilities)
+        {
+                    <li>
+                            <span class="attribute-value">@t.Ability.Name</span>
+                    </li>
+        }
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+<div class="dtm-type">
+    <h3>Type</h3>
+    <ul>
+        @foreach (var t in Model.Types)
+        {
+            <li>
+                @t.Type.Name
+            </li>
+        }
+    </ul>
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

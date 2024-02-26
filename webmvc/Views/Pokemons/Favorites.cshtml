@@ -7,10 +7,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
+            <h1>Favorites Pokémon cards</h1>
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th>@Html.DisplayNameFor(m => m.First().Name)</th>
+                        <th>Select</th>
+                        <th>Navigate</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -20,6 +22,9 @@
                     <tr>
                         <td>
                             <a href="javascript:void(0);" class="pokemon-name text-capitalize text-decoration-none link-dark hover-overlay" data-id="@item.Id">@item.Name</a>
+                        </td>
+                        <td>
+                            <a class="text-capitalize text-decoration-none link-dark" asp-action="Details" asp-route-id="@item.Id">View in tab</a>
                         </td>
                         <td class="text-end">
                             <a class="text-capitalize text-decoration-none link-dark" asp-action="Unfavor" asp-route-id="@item.Id">

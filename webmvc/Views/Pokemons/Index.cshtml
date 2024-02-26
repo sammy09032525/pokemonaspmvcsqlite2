@@ -15,7 +15,10 @@
                 @Html.DisplayNameFor(x => x.AvailablePokemons.Results.GetEnumerator().Current.Name)
             </th>
             <th class="text-end">
-                Actions
+                @if (Model.IsAuthenticated)
+                {
+                    <span>Actions</span>
+                }
             </th>
         </tr>
     </thead>

@@ -8,53 +8,83 @@
 {
     <a class="btn btn-danger" asp-action="Favorites">Favorites <i class="bi bi-bookmark-fill"></i> </a>
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(x => x.AvailablePokemons.Results.GetEnumerator().Current.Name)
-            </th>
-            <th class="text-end">
-                @if (Model.IsAuthenticated)
-                {
-                    <span>Actions</span>
-                }
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.AvailablePokemons.Results)
-        {
-            var isFavorite = Model.FavoritePokemons.Any(p => p.Id.ToString() == item.Url);
-        <tr>
-            <td>
-                    <a class="text-capitalize text-decoration-none link-dark" asp-action="Details" asp-route-id="@item.Url">@item.Name</a>
-            </td>
-                <td class="text-end">
-                    @if (!isFavorite && Model.IsAuthenticated)
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Navigate</th>
+                    <th class="text-end">
+                    @if (Model.IsAuthenticated)
                     {
+                    <span>Actions</span>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AvailablePokemons.Results)
+                {
+                    var isFavorite = Model.FavoritePokemons.Any(p => p.Id.ToString() == item.Url);
+                <tr>
+                    <td>
+                        <a href="javascript:void(0);" class="pokemon-name text-capitalize text-decoration-none link-dark hover-overlay" data-id="@item.Url">@item.Name</a>
+                    </td>
+                    <td>
+                        <a class="text-capitalize text-decoration-none link-dark" asp-action="Details" asp-route-id="@item.Url">View in tab</a>
+                    </td>
+                    <td class="text-end">
+                        @if (!isFavorite && Model.IsAuthenticated)
+                        {
                         <a class="text-capitalize text-decoration-none link-dark" asp-action="Favor" asp-route-id="@item.Url" asp-route-name="@item.Name">
-                        <i class="bi bi-bookmark">Favor</i>
-                    </a>
+                            <i class="bi bi-bookmark">Favor</i>
+                        </a>
+                        }
+        @*              <a asp-action="Unfavor" asp-route-id="@item.Url">Unfavor</a> *@            
+                    </td>
+                </tr>
                 }
-@*              <a asp-action="Unfavor" asp-route-id="@item.Url">Unfavor</a> *@            
-            </td>
-        </tr>
+            </tbody>
+        </table>
+        @{
+            var prevDisabled = string.IsNullOrEmpty(Model.AvailablePokemons.Previous) ? "disabled" : "";
+            var nextDisabled = string.IsNullOrEmpty(Model.AvailablePokemons.Next) ? "disabled" : "";
         }
-    </tbody>
-</table>
-@{
-    var prevDisabled = string.IsNullOrEmpty(Model.AvailablePokemons.Previous) ? "disabled" : "";
-    var nextDisabled = string.IsNullOrEmpty(Model.AvailablePokemons.Next) ? "disabled" : "";
-}
 
-<a asp-action="Index"
-   asp-route-offset="@(Model.AvailablePokemons.Previous)"
-   class="btn btn-light @prevDisabled">
-    <i class="bi bi-arrow-left"></i> Previous
-</a>
-<a asp-action="Index"
-   asp-route-offset="@(Model.AvailablePokemons.Next)"
-   class="btn btn-light @nextDisabled">
-    Next <i class="bi bi-arrow-right"></i>
-</a>
+        <a asp-action="Index"
+           asp-route-offset="@(Model.AvailablePokemons.Previous)"
+           class="btn btn-light @prevDisabled">
+            <i class="bi bi-arrow-left"></i> Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-offset="@(Model.AvailablePokemons.Next)"
+           class="btn btn-light @nextDisabled">
+            Next <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="col-md-6" id="pokemonDetails">
+        <h4 class="text-center">Please select a Pokémon card</h4>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.pokemon-name').forEach(link => {
+            link.addEventListener('click', async function (event) {
+                event.preventDefault();
+                const pokemonId = this.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/Pokemons/PokemonPartialView/${pokemonId}`);
+                    const pokemonInfo = await response.text();
+
+                    console.log("pokemonInfo", pokemonInfo)
+
+                    document.getElementById('pokemonDetails').innerHTML = pokemonInfo;
+                } catch (error) {
+                    console.error('Error fetching Pokémon image:', error);
+                    document.getElementById('pokemonDetails').innerHTML = '<p>Error loading image.</p>';
+                }
+            });
+        });
+    });
+</script>

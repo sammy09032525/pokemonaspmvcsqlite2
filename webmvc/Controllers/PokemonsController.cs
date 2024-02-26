@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokeApiNet;
+using System.Xml.Linq;
 using webmvc.Infrastructure;
+using webmvc.Models;
 using webmvc.ViewModels;
 
 namespace webmvc.Controllers
@@ -13,18 +16,29 @@ namespace webmvc.Controllers
         private readonly PokeApiClient _apiClient;
         private readonly MyDbContext _dbContext;
         private readonly ILogger<PokemonsController> _logger;
-        public PokemonsController(PokeApiClient apiClient, MyDbContext dbContext, ILogger<PokemonsController> logger)
+        private readonly UserManager<User> _userManager;
+        public PokemonsController(PokeApiClient apiClient, MyDbContext dbContext, UserManager<User> userManager, ILogger<PokemonsController> logger)
         {
             _apiClient = apiClient;
             _dbContext = dbContext;
+            _userManager = userManager;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(int offset = 0)
         {
-            _dbContext.Pokemons.Load();
-            var page = await _apiClient.GetNamedResourcePageAsync<Pokemon>(PAGESIZE, offset);
+            Models.Pokemon[] pokemons = null;
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                pokemons = _dbContext.Pokemons.Where(e => e.UserId == user.Id).ToArray();
+            }
+            else
+            {
+                pokemons = _dbContext.Pokemons.ToArray();
+            }
+            var page = await _apiClient.GetNamedResourcePageAsync<PokeApiNet.Pokemon>(PAGESIZE, offset);
             page.Previous = !string.IsNullOrEmpty(page.Previous) ? ExtractOffset(page.Previous) : null;
             page.Next = !string.IsNullOrEmpty(page.Next) ? ExtractOffset(page.Next) : null;
             foreach(var r in page.Results)
@@ -35,7 +49,7 @@ namespace webmvc.Controllers
             var tables = new PokemonViewModel
             {
                 AvailablePokemons = page,
-                FavoritePokemons = _dbContext.Pokemons.ToArray(),
+                FavoritePokemons = pokemons,
                 IsAuthenticated = HttpContext.User.Identity.IsAuthenticated
             };
             return View("Index", tables);
@@ -45,8 +59,9 @@ namespace webmvc.Controllers
         [Authorize]
         public async Task<IActionResult> Favorites()
         {
-            await _dbContext.Pokemons.LoadAsync();
-            var FavoritePokemons = _dbContext.Pokemons.ToArray();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var pokemons = _dbContext.Pokemons.Where(e => e.UserId == user.Id).ToArray();
+            var FavoritePokemons = pokemons;
             return View(FavoritePokemons);
         }
 
@@ -56,7 +71,7 @@ namespace webmvc.Controllers
             if (id == null)
                 return RedirectToAction("", "Pokemons");
 
-            var pokemon = await _apiClient.GetResourceAsync<Pokemon>((int)id);
+            var pokemon = await _apiClient.GetResourceAsync<PokeApiNet.Pokemon>((int)id);
             if (pokemon == null)
             {
                 return NotFound();
@@ -72,8 +87,8 @@ namespace webmvc.Controllers
             if (id == null)
                 return RedirectToAction("", "Pokemons");
 
-
-            var pokemonRecord = new webmvc.Models.Pokemon { Id = id.Value, Name= name };
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var pokemonRecord = new webmvc.Models.Pokemon { Id = id.Value, Name= name, UserId = user.Id };
             _dbContext.Add(pokemonRecord);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("", "Pokemons");
@@ -86,6 +101,7 @@ namespace webmvc.Controllers
             if (id == null)
                 return RedirectToAction("", "Favorites");
 
+            var user = await _userManager.GetUserAsync(HttpContext.User);
             var pokemonRecord = await _dbContext.Pokemons.FirstOrDefaultAsync(c => c.Id == id.Value); 
             if (pokemonRecord == null)
                 return NotFound();
@@ -98,7 +114,7 @@ namespace webmvc.Controllers
         public async Task<IActionResult> PokemonPartialView(int id)
         {
 
-            var pokemon = await _apiClient.GetResourceAsync<Pokemon>((int)id);
+            var pokemon = await _apiClient.GetResourceAsync<PokeApiNet.Pokemon>((int)id);
             return PartialView("_DetailsPartial", pokemon);
         }
 

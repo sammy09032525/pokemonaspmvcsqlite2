@@ -22,6 +22,8 @@ namespace webmvc.Infrastructure
             modelBuilder.Entity<IdentityUserLogin<int>>().HasKey(m => m.UserId);
             modelBuilder.Entity<IdentityUserRole<int>>().HasKey(m => m.UserId);
             modelBuilder.Entity<IdentityUserToken<int>>().HasKey(m => m.UserId);
+            modelBuilder.Entity<Pokemon>()
+                  .HasKey(m => new { m.UserId, m.Id });
         }
     }
 }

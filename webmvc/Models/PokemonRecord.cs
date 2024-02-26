@@ -9,16 +9,8 @@ namespace webmvc.Models
     [Table("Pokemon")]
     public class Pokemon
     {
-        /// <summary>
-        /// The identifier for this resource.
-        /// </summary>
-        [Key]
         public int Id { get; set; }
-
-        /// <summary>
-        /// The name for this resource.
-        /// 
-        /// </summary>
         public string? Name { get; set; } = "";
+        public int UserId { get; set; }
     }
 }

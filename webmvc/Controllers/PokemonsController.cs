@@ -94,6 +94,14 @@ namespace webmvc.Controllers
             return RedirectToAction("Favorites");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> PokemonPartialView(int id)
+        {
+
+            var pokemon = await _apiClient.GetResourceAsync<Pokemon>((int)id);
+            return PartialView("_DetailsPartial", pokemon);
+        }
+
         private static string? ExtractOffset(string url)
         {
             if (int.TryParse(url, out var offset))

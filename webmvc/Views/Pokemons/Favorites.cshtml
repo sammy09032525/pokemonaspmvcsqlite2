@@ -4,27 +4,58 @@
     ViewData["Title"] = "Favorites Pokémon cards";
 }
 
-<table class="table table-bordered table-striped">
-    <thead class="thead-dark text-white">
-        <tr>
-            <th>@Html.DisplayNameFor(m => Model.GetEnumerator().Current.Name)</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <a class="text-capitalize text-decoration-none link-dark hover-overlay" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-            </td>
-            <td class="text-end">
-                <a class="text-capitalize text-decoration-none link-dark" asp-action="Unfavor" asp-route-id="@item.Id">
-                    <i class="bi bi-bookmark-fill">Unfavor</i>
-                </a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
- 
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.First().Name)</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="javascript:void(0);" class="pokemon-name text-capitalize text-decoration-none link-dark hover-overlay" data-id="@item.Id">@item.Name</a>
+                        </td>
+                        <td class="text-end">
+                            <a class="text-capitalize text-decoration-none link-dark" asp-action="Unfavor" asp-route-id="@item.Id">
+                                <i class="bi bi-bookmark-fill">Unfavor</i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6" id="pokemonDetails">
+            <h4 class="text-center">Please select a Pokémon card</h4>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.pokemon-name').forEach(link => {
+        link.addEventListener('click', async function(event) {
+            event.preventDefault();
+            const pokemonId = this.getAttribute('data-id');             
+            try {                
+                const response = await fetch(`/Pokemons/PokemonPartialView/${pokemonId}`);
+                const pokemonInfo = await response.text();
+                
+                console.log("pokemonInfo",pokemonInfo)
+                
+                document.getElementById('pokemonDetails').innerHTML = pokemonInfo;
+            } catch (error) {
+                console.error('Error fetching Pokémon image:', error);
+                document.getElementById('pokemonDetails').innerHTML = '<p>Error loading image.</p>';
+            }
+        });
+    });
+});
+</script>
+
